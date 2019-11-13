@@ -10,4 +10,10 @@ class ArticleCategory extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'category_id';
+
+    public function article()
+    {
+        return $this->hasMany(Article::class);
+    }
+
 }

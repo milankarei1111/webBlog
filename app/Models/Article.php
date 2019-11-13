@@ -10,4 +10,14 @@ class Article extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'article_id';
+
+    public function category()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'category_id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

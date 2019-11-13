@@ -10,4 +10,9 @@ class Comment extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'comment_id';
+
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'article_id');
+    }
 }
