@@ -13,7 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // 綁定單例
+        $this->app->singleton(\Faker\Generator::class, function(){
+                return \Faker\Factory::create('zh-TW');
+            }
+         );
     }
 
     /**
