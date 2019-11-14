@@ -19,7 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('content');
             $table->bigInteger('category_id');
             $table->string('image');
-            $table->string('Remark');
+            $table->string('remark');
             $table->timestamps();
             $table->softDeletes();
         });
