@@ -15,4 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('blog', 'blog\CategoryController');
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('/index', function(){
+        return view('adminlte.master');
+    });
+    Route::resource('/category', 'Blog\CategoryController');
+    Route::resource('/article', 'Blog\ArticleController');
+    Route::resource('/comment', 'Blog\CommentController');
+});
+
+
