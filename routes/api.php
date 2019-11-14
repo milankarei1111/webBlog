@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\ArticleCategory;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +18,15 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('category/{id?}', function($id=null){
+        $find = ArticleCategory::find($id);
+        if($find) {
+            return new CategoryResource($find);
+        } else {
+            return CategoryResource::collection(ArticleCategory::all());
+        }
+    });
 });
