@@ -18,12 +18,12 @@ class ArticleCategoryTableSeeder extends Seeder
         factory(ArticleCategory::class,1)->create();
 
         // 1個分類 2篇文章 2個評論
-        // factory(ArticleCategory::class, 1)->create()
-        //     ->each(function($category) {
-        //         $category->article()->saveMany( factory(Article::class, 2)->make() )
-        //                 ->each(function($article){
-        //                     $article->comment()->save(factory(Comment::class)->make());
-        //                 });
-        // });
+        factory(ArticleCategory::class, 1)->create()
+            ->each(function($category) {
+                $category->articles()->saveMany( factory(Article::class, 2)->make() )
+                        ->each(function($article){
+                            $article->comments()->save(factory(Comment::class)->make());
+                        });
+        });
     }
 }

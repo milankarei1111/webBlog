@@ -19,9 +19,9 @@ class ArticleTableSeeder extends Seeder
         factory(Article::class, 1)->create()
         ->each(function($article) {
             // 1篇文章關聯1篇評論
-            // $article->comment()->save(factory(Comment::class)->make());
+            // $article->comments()->save(factory(Comment::class)->make());
              // 1篇文章關聯2篇評論
-            $article->comment()->saveMany(factory(Comment::class, 2)->make());
+            $article->comments()->saveMany(factory(Comment::class, 2)->make());
         });
     }
 }

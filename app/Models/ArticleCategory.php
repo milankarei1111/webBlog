@@ -12,7 +12,7 @@ class ArticleCategory extends Model
 
     protected $primaryKey = 'category_id';
 
-    public function article()
+    public function articles()
     {
         return $this->hasMany(Article::class, 'category_id');
     }
