@@ -24,6 +24,6 @@ class ArticleCategoryTableSeeder extends Seeder
         //                 ->each(function($article){
         //                     $article->comment()->save(factory(Comment::class)->make());
         //                 });
-        });
+        // });
     }
 }
