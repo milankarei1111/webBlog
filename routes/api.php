@@ -21,12 +21,28 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'blog'], function () {
-    Route::get('category/{id?}', function($id=null){
-        $find = ArticleCategory::find($id);
-        if($find) {
-            return new CategoryResource($find);
-        } else {
-            return CategoryResource::collection(ArticleCategory::all());
-        }
-    });
+    // API 資源類
+    // Route::get('category/{id?}', function($id=null){
+    //     $find = ArticleCategory::find($id);
+    //     if($find) {
+    //         return new CategoryResource($find);
+    //     } else {
+    //         return CategoryResource::collection(ArticleCategory::all());
+    //     }
+    // });
+    
+    Route::get('category/{id?}', 'API\CategoryController@list');
+    Route::patch('category/{id}', 'API\CategoryController@update');
+    Route::post('category', 'API\CategoryController@insert');
+    Route::delete('category/{id}', 'API\CategoryController@delete');
+
+    Route::get('article/{id?}', 'API\ArticleController@list');
+    Route::patch('article/{id}', 'API\ArticleController@update');
+    Route::post('article', 'API\ArticleController@insert');
+    Route::delete('article/{id}', 'API\ArticleController@delete');
+
+    Route::get('comment/{id?}', 'API\CommentController@list');
+    Route::post('comment', 'API\CommentController@insert');
 });
+
+

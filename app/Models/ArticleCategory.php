@@ -11,7 +11,7 @@ class ArticleCategory extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'category_id';
-
+    protected $fillable = ['name', 'description'];
     public function articles()
     {
         return $this->hasMany(Article::class, 'category_id');
