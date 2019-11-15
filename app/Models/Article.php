@@ -11,6 +11,8 @@ class Article extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'article_id';
+    protected $fillable = ['title','content', 'category_id', 'image', 'remark'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     public function category()
     {

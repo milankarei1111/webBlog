@@ -11,6 +11,8 @@ class Comment extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'comment_id';
+    protected $fillable = ['content','article_id', 'user_id'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     public function article()
     {
