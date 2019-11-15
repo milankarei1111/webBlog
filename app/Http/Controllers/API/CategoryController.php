@@ -9,14 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    // get
-    public function test($id=null){
+    public function categoryList($id=null)
+    {
         if ($id) {
-            $category = ArticleCategory::where("category_id", '=', $id)
-                                        ->select('category_id', 'name', 'description')
-                                        ->get();
+            $category = ArticleCategory::where("category_id", '=', $id)->get();
         } else {
-            $category = ArticleCategory::all('category_id', 'name', 'description');
+            $category = ArticleCategory::all();
         }
 
         if(! $category->isEmpty()) {
@@ -31,16 +29,13 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function list($id=null){
+    public function articelList($id)
+    {
         if ($id) {
-            $category = ArticleCategory::where("category_id", '=', $id)
-                                        ->select('category_id', 'name', 'description')
-                                        ->get();
-        } else {
-            $category = ArticleCategory::all('category_id', 'name', 'description');
+            $article = ArticleCategory::find($id)->articles()->get();
         }
 
-        if(! $category->isEmpty()) {
+        if(! $article->isEmpty()) {
            $status = '000000';
         } else {
            $status = 'E00004';
@@ -48,11 +43,12 @@ class CategoryController extends Controller
 
         return response()->json([
             'status' => $status,
-            'data' => $category
+            'data' => $article
         ]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $category = ArticleCategory::find($id);
         $validator = Validator::make($request->only('name', 'description'), [
             'name'=>'required|max:255|min:4',
@@ -61,7 +57,6 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             $status = 'E00001';
-
         } else {
             $status = '000000';
             $category->name = $request['name'];
@@ -74,7 +69,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function insert(Request $request){
+    public function insert(Request $request)
+    {
         $validator = Validator::make($request->only('name', 'description'), [
             'name'=>'required|max:255|min:4',
             'description'=>'max:255|min:4'
@@ -96,7 +92,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $category = ArticleCategory::find($id);
         $category->delete();
 
