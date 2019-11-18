@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArticleCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,7 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = ArticleCategory::orderBy('category_id','desc')->paginate(5);
+        return view('category.index',compact('categories'));
+        // return view('category.index');
     }
 
     /**
@@ -24,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('category.create');
     }
 
     /**
@@ -35,7 +38,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->only('name', 'description'), [
+            'name'=>'required|max:255|min:4',
+            'description'=>'max:255|min:4'
+        ]);
+
+        if ($validator->fails()) {
+            $meassage = $validator->errors();
+        } else {
+            $result = ArticleCategory::create($request->all());
+            if ($result) {
+                $meassage = '新增成功';
+            } else {
+                $meassage = '新增失敗';
+            }
+        }
+        return redirect()->back()->with('meassage', $meassage);
     }
 
     /**
@@ -46,7 +64,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $find = new ArticleCategory;
+        $category = $find->find($id)->toArray();
+        return view('category.show', compact('category'));
     }
 
     /**
@@ -57,7 +77,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $find = new ArticleCategory;
+        $category = $find->find($id)->toArray();
+        return view('category.edit', compact('category'));
     }
 
     /**
@@ -69,7 +91,24 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = ArticleCategory::find($id);
+        $validator = Validator::make($request->only('name', 'description'), [
+            'name'=>'required|max:255|min:4',
+            'description'=>'max:255|min:4'
+        ]);
+
+        if ($validator->fails()) {
+            $meassage = $validator->errors();
+        } else {
+            $status = '000000';
+            $result = $category->update($request->all());
+            if($result) {
+                $message = $id.': 更新成功!';
+            } else {
+                $message = $id.': 更新失敗!!';
+            }
+        }
+        return redirect()->back()->with('message', $message);
     }
 
     /**
@@ -80,6 +119,17 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = ArticleCategory::find($id);
+        if ($category) {
+            $result = $category->delete();
+            if($result == true) {
+                $message = $id.': 刪除成功!';
+            } else {
+                $message = $id.': 刪除失敗!!';
+            }
+        } else {
+            $message = $id.': 查無此筆資料!';
+        }
+        return redirect()->back()->with('message', $message);
     }
 }

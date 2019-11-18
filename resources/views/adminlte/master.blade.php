@@ -78,7 +78,7 @@ desired effect
 
     <!-- Main content -->
     <section class="content container-fluid">
-
+        @yield('content')
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
@@ -87,7 +87,7 @@ desired effect
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+
   @include('adminlte.footer')
 
   <!-- Control Sidebar -->
