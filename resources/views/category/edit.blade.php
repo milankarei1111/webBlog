@@ -1,18 +1,20 @@
-@extends('adminlte.master')
+@extends('adminlte.master');
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box box-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">新增文章分類</h3>
+                  <h3 class="box-title">編輯文章分類</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <form action="{{route('category.store')}}" method="POST">
+                    <form action="{{route('category.update', $category['category_id'])}}" method="POST">
+
                         @csrf
+                        @method('PATCH')
                         <div class="form-group">
                             <label for="formGroupExampleInput">文章分類名稱</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="分類">
+                            <input type="text" class="form-control" name="name" id="name" placeholder="分類" value="{{ $category['name'] }}">
                             @if ($errors->has('name'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('name')}}</strong>
@@ -21,7 +23,7 @@
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput2">文章分類描述</label>
-                            <input type="text" class="form-control" name="description" id="description" placeholder="描述">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="描述" value="{{ $category['description'] }}">
                             @if ($errors->has('description'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('description')}}</strong>
@@ -38,3 +40,4 @@
         </div>
     </div>
 @endsection
+

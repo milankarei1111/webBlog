@@ -66,9 +66,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $find = new ArticleCategory;
-        $category = $find->find($id)->toArray();
-        return view('category.show', compact('category'));
+        $category = new ArticleCategory;
+        $articles = $category->find($id)->articles()->get();
+        return view('category.show', compact('articles'));
     }
 
     /**
@@ -99,18 +99,18 @@ class CategoryController extends Controller
             'description'=>'max:255|min:4'
         ]);
 
-        if ($validator->fails()) {
-            $meassage = $validator->errors();
-        } else {
-            $status = '000000';
+        $meassage = '';
+        if (!$validator->fails()) {
             $result = $category->update($request->all());
-            if($result) {
-                $message = $id.': 更新成功!';
+            if ($result) {
+                $meassage = '更新成功';
             } else {
-                $message = $id.': 更新失敗!!';
+                $meassage = '更新失敗';
             }
+            return redirect()->route('category.index')->with('meassage', $meassage);
+        } else {
+           return view('category.edit')->withErrors($validator);
         }
-        return redirect()->back()->with('message', $message);
     }
 
     /**
@@ -124,14 +124,14 @@ class CategoryController extends Controller
         $category = ArticleCategory::find($id);
         if ($category) {
             $result = $category->delete();
-            if($result == true) {
-                $message = $id.': 刪除成功!';
+            if($result) {
+                $meassage = $category->name.': 刪除成功!';
             } else {
-                $message = $id.': 刪除失敗!!';
+                $meassage = $category->name.': 刪除失敗!!';
             }
         } else {
-            $message = $id.': 查無此筆資料!';
+            $meassage = $category->name.': 查無此筆資料!';
         }
-        return redirect()->back()->with('message', $message);
+        return redirect()->back()->with('meassage', $meassage);
     }
 }

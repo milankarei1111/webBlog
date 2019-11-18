@@ -28,12 +28,14 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">HEADER</li>
+        <li class="header">Blog管理</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+        <li class="active"><a href="{{ route('category.index') }}"><i class="fa fa-link"></i> <span>文章分類</span></a></li>
+        <li><a href="{{ route('article.index') }}"><i class="fa fa-link"></i> <span>文章內容</span></a></li>
+        <li><a href="{{ route('comment.index') }}"><i class="fa fa-link"></i> <span>文章評論</span></a></li>
+        <li class="header">會員管理</li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+          <a href=""><i class="fa fa-link"></i> <span>會員管理</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
