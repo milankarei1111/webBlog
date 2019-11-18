@@ -43,6 +43,8 @@ Route::group(['prefix' => 'blog'], function () {
     Route::post('article', 'API\ArticleController@insert');
     Route::delete('article/{id}', 'API\ArticleController@delete');
 
-    Route::get('comment/{id?}', 'API\CommentController@list');
+    Route::get('comment/{id?}', 'API\CommentController@commentList');
+    Route::patch('comment/{id}', 'API\CommentController@update');
     Route::post('comment', 'API\CommentController@insert');
+    Route::delete('comment/{id}', 'API\CommentController@delete');
 });
