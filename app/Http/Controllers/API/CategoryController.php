@@ -22,11 +22,7 @@ class CategoryController extends Controller
         } else {
            $status = 'E00004';
         }
-
-        return response()->json([
-            'status' => $status,
-            'data' => $category
-        ]);
+        return $this->responseMessage($status, $category);
     }
 
     public function articelList($id)
@@ -57,16 +53,19 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             $status = 'E00001';
+            $meassage = $validator->errors();
         } else {
             $status = '000000';
-            $category->name = $request['name'];
-            $category->description = $request['description'];
-            $category->save();
+            $result = $category->update($request->all());
+            if ($result) {
+                $status = '000000';
+                $meassage = '更新成功';
+            } else {
+                $status = 'E00001';
+                $meassage = '更新失敗';
+            }
         }
-        return response()->json([
-            'status' => $status,
-            'error' => $validator->errors(),
-        ]);
+        return $this->responseMessage($status, $meassage);
     }
 
     public function insert(Request $request)
@@ -78,32 +77,46 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             $status = 'E00001';
-
+            $meassage = $validator->errors();
         } else {
-            $status = '000000';
-            ArticleCategory::create([
-                'name' =>  $request['name'],
-                'description' => $request['description'],
-            ]);
+            $result = ArticleCategory::create($request->all());
+            if ($result) {
+                $status = '000000';
+                $meassage = '新增成功';
+            } else {
+                $status = 'E00001';
+                $meassage = '新增失敗';
+            }
         }
-        return response()->json([
-            'status' => $status,
-            'error' => $validator->errors(),
-        ]);
+        return $this->responseMessage($status, $meassage);
     }
 
     public function delete($id)
     {
+        $meassage = '';
         $category = ArticleCategory::find($id);
-        $category->delete();
+        if ($category) {
+            $category->delete();
 
-        if($category->trashed()) {
-            $status = '000000';
+            if($category->trashed()) {
+                $status = '000000';
+                $meassage = '刪除成功';
+            } else {
+                $status = 'E00001';
+                $meassage = '刪除失敗';
+            }
         } else {
-            $status = 'E00001';
+            $status= 'E00004';
+            $meassage = '查無此資料!';
         }
+        return $this->responseMessage($status, $meassage);
+    }
+
+    public function responseMessage($status, $value=null)
+    {
         return response()->json([
             'status' => $status,
+            'value' => $value
         ]);
     }
 }

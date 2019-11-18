@@ -40,6 +40,8 @@ class CommentController extends Controller
                 $meassage = $validator->errors();
            } else {
                 $result = $comment->update([
+                    'content'=>$request->content
+                ],[
                     'content' => $request['content']
                 ]);
                 if ($result) {
@@ -86,7 +88,7 @@ class CommentController extends Controller
     {
         $meassage = '';
         $comment = Comment::find($id);
-        if ( $comment) {
+        if ($comment) {
             $comment->delete();
 
             if($comment->trashed()) {
@@ -103,7 +105,8 @@ class CommentController extends Controller
         return $this->responseMessage($status, $meassage);
     }
 
-    public function responseMessage($status, $value=null){
+    public function responseMessage($status, $value=null)
+    {
         return response()->json([
             'status' => $status,
             'value' => $value
