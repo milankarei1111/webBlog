@@ -36,7 +36,7 @@ class CommentController extends Controller
             ]);
 
            if ($validator->fails()) {
-                $status = 'E00001';
+                $status = 'E00002';
                 $meassage = $validator->errors();
            } else {
                 $result = $comment->update([
@@ -68,7 +68,7 @@ class CommentController extends Controller
             'user_id' => 'required',
         ]);
         if ($validator->fails()) {
-           $status = 'E00001';
+           $status = 'E00002';
            $meassage = $validator->errors();
         } else {
             $comment = new Comment;

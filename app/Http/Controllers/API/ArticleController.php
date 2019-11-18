@@ -50,7 +50,7 @@ class ArticleController extends Controller
                 'remark' => 'max:255',
             ]);
             if($validator->fails()) {
-                $status = 'E00001';
+                $status = 'E00002';
                 $meassage = $validator->errors();
             } else {
                 $status = '000000';
@@ -82,7 +82,7 @@ class ArticleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $status = 'E00001';
+            $status = 'E00002';
             $meassage = $validator->errors();
         } else {
             $article = new Article($request->all());
