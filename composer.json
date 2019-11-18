@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "almasaeed2010/adminlte": "~2.4",
+        "caouecs/laravel-lang": "^4.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^1.0"

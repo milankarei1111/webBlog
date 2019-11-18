@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\ArticleCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -43,17 +44,18 @@ class CategoryController extends Controller
             'description'=>'max:255|min:4'
         ]);
 
-        if ($validator->fails()) {
-            $meassage = $validator->errors();
-        } else {
+        $meassage = '';
+        if (!$validator->fails()) {
             $result = ArticleCategory::create($request->all());
             if ($result) {
                 $meassage = '新增成功';
             } else {
                 $meassage = '新增失敗';
             }
+            return redirect()->route('category.index')->with('meassage', $meassage);
+        } else {
+           return view('category.create')->withErrors($validator);
         }
-        return redirect()->back()->with('meassage', $meassage);
     }
 
     /**
