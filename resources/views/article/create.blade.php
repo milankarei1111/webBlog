@@ -28,9 +28,35 @@
                                 </div>
                             @endif
                         </div>
+                        {{-- <div class="form-group row">
+                            <label for="type" class="col-sm-2 col-form-label-sm text-md-right">分類</label>
+                            <div class="col-sm-8">
+                                <select name="types" id="types" class="form-control form-control-sm">
+                                    <option value="0">請選擇分類</option>
+                                    @if ($categories)
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->category_id}}">
+                                                {{$category->name}}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                @if ($errors->has('category_id'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('category_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                         </div> --}}
                         <div class="form-group">
-                            <label for="formGroupExampleInput3">分類</label>
-                            <input type="text" class="form-control" name="category_id" id="category_id">
+                            <select name="category_id" id="category_id" class="form-control form-control-sm">
+                                <option value="">請選擇文章分類</option>
+                                @foreach($categories as $category)
+                                <option value="{{$category->category_id}}">
+                                    {{ $category->name }}
+                                </option>
+                                @endforeach
+                            </select>
                             @if ($errors->has('category_id'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('category_id')}}</strong>
@@ -45,8 +71,6 @@
                                     <strong style="color:red;">{{$errors->first('image')}}</strong>
                                 </div>
                             @endif
-                            <input type="file" id="image" name="image">
-                            <p class="help-block">選擇輸入網址或檔案</p>
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput4">備註</label>

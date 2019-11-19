@@ -17,7 +17,6 @@
                         </a> --}}
                     </div>
                 </div><!-- /.box-header -->
-
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <thead>
@@ -56,7 +55,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="exampleModalLabel">注意</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="關閉">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
@@ -64,7 +63,7 @@
                                                             <h4 style="color:red">你確定要刪除嗎?</h4>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                                                             <button type="submit" class="btn btn-primary">確定</button>
                                                         </div>
                                                     </div>

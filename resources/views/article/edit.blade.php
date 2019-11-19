@@ -8,12 +8,12 @@
                   <h3 class="box-title">編輯文章</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <form action="{{route('article.update', $article['article_id'])}}" method="POST">
+                    <form action="{{route('article.update', $article->article_id)}}" method="POST">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">
                             <label for="formGroupExampleInput">標題</label>
-                            <input type="text" class="form-control" name="title" id="title" placeholder="標題" value="{{$article['title'] }}">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="標題" value="{{$article->title}}">
                             @if ($errors->has('title'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('title')}}</strong>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput2">內容</label>
-                        <input type="text" class="form-control" name="content" id="content" placeholder="內容" value="{{$article['content']}}">
+                        <input type="text" class="form-control" name="content" id="content" placeholder="內容" value="{{$article->content}}">
                             @if ($errors->has('content'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('content')}}</strong>
@@ -31,22 +31,35 @@
                         </div>
                         <div class="form-group">
                                 <label for="formGroupExampleInput3">分類</label>
-                                <input type="text" class="form-control" name="category_id" id="category_id" value="{{$article['category_id']}}">
+                                <select name="category_id" id="category_id" class="form-control form-control-sm">
+                                    @foreach($categories as $category)
+                                            <option value="{{ $category->category_id }}" {{ ($article->category_id == $category->category_id)?"selected":"" }}>
+                                                {{ $category->name }}
+                                            </option>
+                                    @endforeach
+                                </select>
                                 @if ($errors->has('category_id'))
                                     <div class="invalid-feedbadk">
                                         <strong style="color:red;">{{$errors->first('category_id')}}</strong>
                                     </div>
                                 @endif
-                            </div>
-                        <div class="form-group">
+                         </div>
+                        {{-- <div class="form-group">
                             <label for="formGroupExampleInput4">圖片</label>
-                        <input type="text" class="form-control" name="image" id="image" placeholder="網址" value="{{$article['image']}}">
+                            <input type="text" class="form-control" name="image" id="image" placeholder="網址" value="{{$article['image']}}">
                             @if ($errors->has('image'))
                                 <div class="invalid-feedbadk">
                                     <strong style="color:red;">{{$errors->first('image')}}</strong>
                                 </div>
                             @endif
+                        </div> --}}
+
+                        <div class="form-group">
+                            <label for="exampleInputFile">File input</label>
+                            <input type="file" name="image" id="exampleInputFile">
+                            <p class="help-block">Example block-level help text here.</p>
                         </div>
+
                         <div class="form-group">
                             <label for="formGroupExampleInput5">備註</label>
                             <input type="text" class="form-control" name="remark" id="remark" value="{{$article['remark']}}">

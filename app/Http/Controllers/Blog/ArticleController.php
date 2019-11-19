@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Blog;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\ArticleCategory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
@@ -28,7 +29,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('article.create');
+        $categories = ArticleCategory::orderBy('category_id', 'desc')->get();
+        return view('article.create')->with('categories' , $categories);
     }
 
     /**
@@ -57,7 +59,8 @@ class ArticleController extends Controller
             }
             return redirect()->route('article.index')->with('meassage', $meassage);
         } else {
-           return view('article.create')->withErrors($validator);
+           $categories = ArticleCategory::orderBy('category_id', 'desc')->get();
+           return view('article.create')->withErrors($validator)->with('categories', $categories);
         }
     }
 
@@ -80,10 +83,11 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ArticleCategory $category, Article $article)
+    public function edit($id)
     {
-        $article = compact('article','category');
-        return view('article.edit', $article);
+        $article = Article::findOrFail($id);
+        $categories = ArticleCategory::orderBy('name' , 'ASC')->get();
+        return View::make('article.edit', compact('article', 'categories'));
     }
 
     /**
