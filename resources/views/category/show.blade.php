@@ -30,8 +30,6 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$article->title}}</td>
                                     <td>{{$article->content}}</td>
-                                    {{-- <img src="{{$article->image}}" alt="{{$article->image}}" title="要顯示的文字" border="圖片邊框">
-                                    <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image"> --}}
                                     <td><img src="{{$article->image}}" class="img-thumbnail" alt="Responsive image"></td>
                                     <td>{{$article->remark}}</td>
                                 </tr>

@@ -16,9 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = ArticleCategory::orderBy('category_id','desc')->paginate(5);
+        $categories = ArticleCategory::query()->paginate(5);
         return view('category.index',compact('categories'));
-        // return view('category.index');
     }
 
     /**
