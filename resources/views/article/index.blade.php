@@ -27,7 +27,7 @@
                             <th class="text-left">內容</th>
                             <th class="text-left">圖片</th>
                             <th class="text-left">備註</th>
-                            <th class="text-center" style="width: 6em;">查看文章</th>
+                            <th class="text-center" style="width: 6em;">查看評論</th>
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
@@ -38,7 +38,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$article->title}}</td>
                                     <td>{{$article->content}}</td>
-                                    <td>{{$article->image}}</td>
+                                    <td><img src="{{$article->image}}" class="img-thumbnail" alt="Responsive image"></td>
                                     <td>{{$article->remark}}</td>
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('article.show', $article->article_id) }}">
@@ -70,7 +70,7 @@
                 </div>{{-- /.box-body --}}
 
                 <div class="box-footer clearfix">
-                        {{-- {{ $article->links() }} --}}
+                        {{ $articles->links() }}
                 </div>{{-- /.box-footer --}}
              </div><!-- /.box -->
         </div>
