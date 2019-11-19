@@ -27,7 +27,7 @@
                             <th class="text-left">內容</th>
                             <th class="text-left">圖片</th>
                             <th class="text-left">備註</th>
-                            <th class="text-center" style="width: 6em;">查看評論</th>
+                            {{-- <th class="text-center" style="width: 6em;">查看評論</th> --}}
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
@@ -40,18 +40,18 @@
                                     <td>{{$article->content}}</td>
                                     <td><img src="{{$article->image}}" class="img-thumbnail" alt="Responsive image"></td>
                                     <td>{{$article->remark}}</td>
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('article.show', $article->article_id) }}">
                                             <i class="fa fa-eye fa-fw"></i>
                                         </a>
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('article.edit', $article->article_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <form action="{{ route('category.destroy', $article->article_id) }}" method="POST">
+                                        <form action="{{ route('article.destroy', $article->article_id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger btn-xs" type="submit">

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Blog;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ArticleCategory;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -78,9 +80,9 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Article $article)
+    public function edit(ArticleCategory $category, Article $article)
     {
-        $article = compact('article');
+        $article = compact('article','category');
         return view('article.edit', $article);
     }
 
@@ -93,7 +95,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Article::find($id);
+        $article = Article::find($id);
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255|min:4',
             'content' => 'required|max:255|min:10',
@@ -104,7 +106,7 @@ class ArticleController extends Controller
 
         $meassage = '';
         if (!$validator->fails()) {
-            $result = $category->update($request->all());
+            $result = $article->update($request->all());
             if ($result) {
                 $meassage = '更新成功';
             } else {

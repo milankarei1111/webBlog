@@ -25,7 +25,6 @@
                             <th class="text-center" style="width: 4em;">#</th>
                             <th class="text-left">分類名稱</th>
                             <th class="text-left">分類描述</th>
-                            <th class="text-center" style="width: 6em;">查看文章</th>
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
@@ -36,11 +35,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{ $category->name}}</td>
                                     <td>{{ $category->description}}</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-default btn-xs" href="{{ route('category.show', $category->category_id) }}">
-                                            <i class="fa fa-eye fa-fw"></i>
-                                        </a>
-                                    </td>
+
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('category.edit', $category->category_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>
