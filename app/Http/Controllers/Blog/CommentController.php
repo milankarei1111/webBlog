@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Blog;
 
-use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -14,7 +16,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::orderBy('comment_id', 'desc')->paginate(20);
+        return view('comment.index', compact('comments'));
     }
 
     /**
@@ -24,7 +27,7 @@ class CommentController extends Controller
      */
     public function create()
     {
-        //
+        return view('comment.create');
     }
 
     /**
@@ -35,7 +38,24 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all() ,[
+            'content' => 'required|max:255|min:4',
+            'article_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        $meassage = '';
+        if (!$validator->fails()) {
+            $result = Comment::create($request->all());
+            if ($result) {
+                $meassage = '新增成功';
+            } else {
+                $meassage = '新增失敗';
+            }
+            return redirect()->route('comment.index')->with('meassage', $meassage);
+        } else {
+           return view('comment.create')->withErrors($validator);
+        }
     }
 
     /**
@@ -55,9 +75,10 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Comment $comment)
     {
-        //
+        $comment = compact('comment');
+        return view('comment.edit', $comment);
     }
 
     /**
@@ -69,7 +90,29 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $meassage = '';
+        $comment = Comment::find($id);
+        $validator = Validator::make([
+            'content' => $request->content
+            ], [
+            'content' => 'required|max:255|min:4'
+            ]);
+
+        if ($validator->fails()) {
+            return view('comment.edit')->withErrors($validator);
+        } else {
+            $result = $comment->update([
+                'content'=>$request->content
+            ],[
+                'content' => $request['content']
+            ]);
+            if ($result) {
+                $meassage = '更新成功';
+            } else {
+                $meassage = '更新失敗';
+            }
+            return redirect()->route('comment.index')->with('meassage', $meassage);
+        }
     }
 
     /**
@@ -80,6 +123,17 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::find($id);
+        if ($comment) {
+            $result = $comment->delete();
+            if($result) {
+                $meassage = '刪除成功!';
+            } else {
+                $meassage = '刪除失敗!!';
+            }
+        } else {
+            $meassage = $comment->title.': 查無此筆資料!';
+        }
+        return redirect()->back()->with('meassage', $meassage);
     }
 }

@@ -10,11 +10,11 @@
 
             <div class="box box box-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">文章分類表</h3>
+                  <h3 class="box-title">評論列表</h3>
                     <div class="no-margin pull-right">
-                        <a href="{{route('category.create')}}" class="btn btn-primary btn-md">
-                            <i class="fa fa-plus fa-fw"></i> 新增文章分類
-                        </a>
+                        {{-- <a href="{{route('comment.create')}}" class="btn btn-primary btn-md">
+                            <i class="fa fa-plus fa-fw"></i> 新增評論
+                        </a> --}}
                     </div>
                 </div><!-- /.box-header -->
 
@@ -23,26 +23,27 @@
                         <thead>
                             <tr>
                             <th class="text-center" style="width: 4em;">#</th>
-                            <th class="text-left">分類名稱</th>
-                            <th class="text-left">分類描述</th>
+                            <th class="text-left">評論內容</th>
+                            <th class="text-left" style="width: 6em;">文章編號</th>
+                            <th class="text-left" style="width: 6em;">會員帳號</th>
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($categories as $category)
+                            @forelse ($comments as $comment)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{ $category->name}}</td>
-                                    <td>{{ $category->description}}</td>
-
+                                    <td>{{ $comment->content}}</td>
+                                    <td>{{ $comment->article_id}}</td>
+                                    <td>{{ $comment->user_id}}</td>
                                     <td class="text-center">
-                                        <a class="btn btn-default btn-xs" href="{{ route('category.edit', $category->category_id) }}">
+                                        <a class="btn btn-default btn-xs" href="{{ route('comment.edit', $comment->comment_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <form action="{{ route('category.destroy', $category->category_id) }}" method="POST">
+                                        <form action="{{ route('comment.destroy', $comment->comment_id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <!-- Button trigger modal -->
@@ -82,7 +83,7 @@
                 </div>{{-- /.box-body --}}
 
                 <div class="box-footer clearfix">
-                        {{ $categories->links() }}
+                        {{ $comments->links() }}
                 </div>{{-- /.box-footer --}}
              </div><!-- /.box -->
         </div>
