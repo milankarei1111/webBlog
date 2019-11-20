@@ -38,13 +38,8 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$article->title}}</td>
                                     <td>{{$article->content}}</td>
-                                    <td><img src="{{$article->image}}" class="img-thumbnail" alt="Responsive image"></td>
+                                    <td><img src="{{asset($article->image)}}" class="img-thumbnail" alt="Responsive image"></td>
                                     <td>{{$article->remark}}</td>
-                                    {{-- <td class="text-center">
-                                        <a class="btn btn-default btn-xs" href="{{ route('article.show', $article->article_id) }}">
-                                            <i class="fa fa-eye fa-fw"></i>
-                                        </a>
-                                    </td> --}}
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('article.edit', $article->article_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>

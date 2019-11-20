@@ -8,7 +8,7 @@
                   <h3 class="box-title">編輯文章</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <form action="{{route('article.update', $article->article_id)}}" method="POST">
+                    <form action="{{route('article.update', $article->article_id)}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">
@@ -44,20 +44,9 @@
                                     </div>
                                 @endif
                          </div>
-                        {{-- <div class="form-group">
-                            <label for="formGroupExampleInput4">圖片</label>
-                            <input type="text" class="form-control" name="image" id="image" placeholder="網址" value="{{$article['image']}}">
-                            @if ($errors->has('image'))
-                                <div class="invalid-feedbadk">
-                                    <strong style="color:red;">{{$errors->first('image')}}</strong>
-                                </div>
-                            @endif
-                        </div> --}}
-
                         <div class="form-group">
-                            <label for="exampleInputFile">File input</label>
-                            <input type="file" name="image" id="exampleInputFile">
-                            <p class="help-block">Example block-level help text here.</p>
+                            <label for="exampleInputFile">圖片上傳</label>
+                            <input type="file" name="image">
                         </div>
 
                         <div class="form-group">
