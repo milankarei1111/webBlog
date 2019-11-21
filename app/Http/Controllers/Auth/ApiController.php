@@ -34,8 +34,7 @@ class ApiController extends Controller
                 $value = '註冊失敗';
             }
         }
-        $data = $this->responseMessage($status, $value);
-        return compact('data');
+        return $this->responseMessage($status, $value);
     }
 
     protected function create(array $data)
@@ -55,11 +54,11 @@ class ApiController extends Controller
         ]);
     }
 
-    protected function responseMessage($status, $value = null)
+    protected function responseMessage($status, $value=null)
     {
-        return [
+        return response()->json([
             'status' => $status,
             'value' => $value
-        ];
+        ]);
     }
 }
