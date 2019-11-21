@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
-    public function articleList($id=null)
+    public function articleList($id = null)
     {
         if ($id) {
             $article = Article::where("article_id", '=', $id)->get();
@@ -17,10 +18,10 @@ class ArticleController extends Controller
             $article = Article::all();
         }
 
-        if(! $article->isEmpty()) {
-           $status = '000000';
+        if (!$article->isEmpty()) {
+            $status = '000000';
         } else {
-           $status = 'E00004';
+            $status = 'E00004';
         }
         return $this->responseMessage($status, $article);
     }
@@ -29,12 +30,12 @@ class ArticleController extends Controller
     {
         $comment = Article::find($id)->comments()->get();
 
-        if(! $comment->isEmpty()) {
+        if (!$comment->isEmpty()) {
             $status = '000000';
-         } else {
+        } else {
             $status = 'E00004';
-         }
-         return $this->responseMessage($status, $comment);
+        }
+        return $this->responseMessage($status, $comment);
     }
 
     public function update(Request $request, $id)
@@ -46,15 +47,27 @@ class ArticleController extends Controller
                 'title' => 'required|max:255|min:4',
                 'content' => 'required|max:255|min:10',
                 'category_id' => 'required|max:20',
-                'image' => 'max:255',
+                'image' => 'image|max:255',
                 'remark' => 'max:255',
             ]);
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 $status = 'E00002';
                 $meassage = $validator->errors();
             } else {
-                $status = '000000';
-                $result = $article->update($request->all());
+                $data = $request->all();
+                if ($request->image) {
+                    $uploadData = $this->uploadFile($request);
+                    if ($uploadData['status']) {
+                        $savePath = $uploadData['meassage'];
+                        $data['image'] = $savePath;
+                    } else {
+                        $status = 'E00002';
+                        $meassage = $uploadData['meassage'];
+                    }
+                }
+
+                $result = $article->update( $data);
+
                 if ($result) {
                     $status = '000000';
                     $meassage = '更新成功';
@@ -77,7 +90,7 @@ class ArticleController extends Controller
             'title' => 'required|max:255|min:4',
             'content' => 'required|max:255|min:10',
             'category_id' => 'required|integer|max:20',
-            'image' => 'max:255',
+            'image' => 'image|max:255',
             'remark' => 'max:255',
         ]);
 
@@ -85,8 +98,15 @@ class ArticleController extends Controller
             $status = 'E00002';
             $meassage = $validator->errors();
         } else {
-            $article = new Article($request->all());
-            $result = $article->save();
+            $data = $request->all();
+            if ($request->image) {
+                $uploadData = $this->uploadFile($request);
+                if ($uploadData['status']) {
+                    $savePath = $uploadData['meassage'];
+                    $data['image'] = $savePath;
+                }
+            }
+            $result = Article::create($data);
             if ($result) {
                 $status = '000000';
                 $meassage = '新增成功';
@@ -98,14 +118,13 @@ class ArticleController extends Controller
         return $this->responseMessage($status, $meassage);
     }
 
-
     public function delete($id)
     {
         $meassage = '';
         $article = Article::find($id);
-        if($article){
+        if ($article) {
             $article->delete();
-            if($article->trashed()) {
+            if ($article->trashed()) {
                 $status = '000000';
                 $meassage = '刪除成功';
             } else {
@@ -113,12 +132,45 @@ class ArticleController extends Controller
                 $meassage = '刪除失敗';
             }
         } else {
-            $status= 'E00004';
+            $status = 'E00004';
             $meassage = '查無此資料!';
         }
         return $this->responseMessage($status, $meassage);
     }
-    public function responseMessage($status, $value=null)
+
+    private function uploadFile(Request $request)
+    {
+        $data = [
+            'status' => false,
+            'meassage' => '文件上傳失敗'
+        ];
+
+        if ($request->hasFile('image')) {
+            $picture = $request->file('image');
+            if (!$picture->isValid()) {
+                $data['meassage'] = '無效的上傳文件';
+            }
+            $extension = $picture->getClientOriginalExtension();
+            $fileName = $picture->getClientOriginalName();
+            $newFileName = md5($fileName . time() . mt_rand(1, 10000)) . '.' . $extension;
+            $savePath = 'images/' . $newFileName;
+            $webPath = '/storage/' . $savePath;
+
+            if (Storage::disk('public')->has($savePath)) {
+                $data['status'] = true;
+                $data['meassage'] = $webPath;
+            }
+            if ($picture->storePubliclyAs('images', $newFileName, ['disk' => 'public'])) {
+                $data['status'] = true;
+                $data['meassage'] = $webPath;
+            }
+        } else {
+            $data['meassage'] = '請選擇要上傳的檔案';
+        }
+        return $data;
+    }
+
+    public function responseMessage($status, $value = null)
     {
         return response()->json([
             'status' => $status,

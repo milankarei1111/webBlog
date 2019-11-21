@@ -49,13 +49,25 @@ class ArticleController extends Controller
             'title' => 'required|max:255|min:4',
             'content' => 'required|max:255|min:10',
             'category_id' => 'required|integer|max:20',
-            'image' => 'max:255',
+            'image' => 'image|max:255',
             'remark' => 'max:255',
         ]);
-
         $meassage = '';
+        $categories = ArticleCategory::orderBy('category_id', 'desc')->get();
+
         if (!$validator->fails()) {
-            $result = Article::create($request->all());
+            $data = $request->all();
+            if ($request->file('image')) {
+                $uploadData = $this->uploadFile($request);
+                if ($uploadData['status']) {
+                    $savePath = $uploadData['meassage'];
+                    $data['image'] = $savePath;
+                } else {
+                    $meassage = $uploadData['meassage'];
+                    return view('article.create', compact('meassage', 'categories'));
+                }
+            }
+            $result = Article::create($data);
             if ($result) {
                 $meassage = '新增成功';
             } else {
@@ -63,7 +75,6 @@ class ArticleController extends Controller
             }
             return redirect()->route('article.index')->with('meassage', $meassage);
         } else {
-            $categories = ArticleCategory::orderBy('category_id', 'desc')->get();
             return view('article.create')->withErrors($validator)->with('categories', $categories);
         }
     }
@@ -112,27 +123,31 @@ class ArticleController extends Controller
         ]);
 
         $meassage = '';
-        if (! $validator->fails()) {
-            $uploadData = $this->uploadFile($request);
-            if ($uploadData['status']) {
-                $savePath = $uploadData['meassage'];
+        $categories = ArticleCategory::orderBy('category_id', 'desc')->get();
 
-                $article = Article::find($id);
-                $data = $request->all();
-                $data['image'] = $savePath;
-                $result = $article->update($data);
+        if (!$validator->fails()) {
+            $data = $request->all();
+            $article = Article::find($id);
 
-                if ($result) {
-                    $meassage = '更新成功';
+            if ($request->image) {
+                $uploadData = $this->uploadFile($request);
+                if ($uploadData['status']) {
+                    $savePath = $uploadData['meassage'];
+                    $data['image'] = $savePath;
                 } else {
-                    $meassage = '更新失敗';
+                    $meassage = $uploadData['meassage'];
+                    return view('article.edit', compact('meassage', 'categories'));
                 }
+            }
+            $result = $article->update($data);
+            if ($result) {
+                $meassage = '更新成功';
             } else {
-                $meassage = $uploadData['meassage'];
+                $meassage = '更新失敗';
             }
             return redirect()->route('article.index')->with('meassage', $meassage);
         } else {
-            return view('article.edit')->withErrors($validator);
+            return view('article.edit')->withErrors($validator)->with('categories', $categories);
         }
     }
 
@@ -164,29 +179,21 @@ class ArticleController extends Controller
             'status' => false,
             'meassage' => '文件上傳失敗'
         ];
-
         if ($request->hasFile('image')) {
             $picture = $request->file('image');
             if (!$picture->isValid()) {
                 $data['meassage'] = '無效的上傳文件';
             }
-            // 文件扩展名
             $extension = $picture->getClientOriginalExtension();
-            // 文件名
             $fileName = $picture->getClientOriginalName();
-            // 生成新的统一格式的文件名
             $newFileName = md5($fileName . time() . mt_rand(1, 10000)) . '.' . $extension;
-            // 图片保存路径
             $savePath = 'images/' . $newFileName;
-            // Web 访问路径
             $webPath = '/storage/' . $savePath;
 
-            // 将文件保存到本地 storage/app/public/images 目录下，先判断同名文件是否已经存在，如果存在直接返回
             if (Storage::disk('public')->has($savePath)) {
                 $data['status'] = true;
                 $data['meassage'] = $webPath;
             }
-            // 否则执行保存操作，保存成功将访问路径返回给调用方
             if ($picture->storePubliclyAs('images', $newFileName, ['disk' => 'public'])) {
                 $data['status'] = true;
                 $data['meassage'] = $webPath;

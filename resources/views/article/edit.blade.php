@@ -46,9 +46,13 @@
                          </div>
                         <div class="form-group">
                             <label for="exampleInputFile">圖片上傳</label>
+                            <div>
+                                @if ($article->image)
+                                    <img src="{{asset($article->image)}}" class="img-thumbnail" alt="Responsive image">
+                                @endif
+                            </div>
                             <input type="file" name="image">
                         </div>
-
                         <div class="form-group">
                             <label for="formGroupExampleInput5">備註</label>
                             <input type="text" class="form-control" name="remark" id="remark" value="{{$article['remark']}}">
