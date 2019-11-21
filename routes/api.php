@@ -30,6 +30,10 @@ Route::group(['prefix' => 'blog'], function () {
     //         return CategoryResource::collection(ArticleCategory::all());
     //     }
     // });
+    Route::post('/register', 'Auth\ApiController@register');
+    Route::post('/login', 'Auth\ApiController@login');
+    Route::post('/refresh', 'Auth\ApiController@refresh');
+    Route::post('/logout', 'Auth\ApiController@logout');
 
     Route::get('category/{id?}', 'API\CategoryController@categoryList');
     Route::get('category/{id}/article', 'API\CategoryController@articelList'); // 關聯文章
