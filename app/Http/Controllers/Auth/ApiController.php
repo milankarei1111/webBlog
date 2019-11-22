@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
@@ -46,10 +47,10 @@ class ApiController extends Controller
     {
         $inputName = request($this->username());
         $user = User::where($this->username(), $inputName)->get()->first();
-        if($user){
-            if(password_verify(request('password'), $user->password)){
+        if ($user) {
+            if (password_verify(request('password'), $user->password)) {
                 $api_token = Str::random(80);
-                $result = $user->update(['api_token'=>hash('sha256', $api_token)]);
+                $result = $user->update(['api_token' => hash('sha256', $api_token)]);
                 if ($result) {
                     $status = '000000';
                     $value = $api_token;
@@ -68,6 +69,41 @@ class ApiController extends Controller
         return $this->responseMessage($status, $value);
     }
 
+    public function logout()
+    {
+        $user = auth()->user();
+        if ($user) {
+            $result = $user->update(['api_token' => null]);
+            if ($result) {
+                $status = '000000';
+                $value = '登出成功';
+            } else {
+                $status = 'E00001';
+                $value = '認證失敗';
+            }
+        }
+        return $this->responseMessage($status, $value);
+    }
+
+    public function refresh()
+    {
+        $api_token = Str::random(80);
+        $user = auth()->user();
+        if ($user) {
+            $result = $user->update(['api_token' => hash('sha256', $api_token)]);
+            if ($result) {
+                $status = '000000';
+                $value = $api_token;
+            } else {
+                $status = 'E00001';
+                $value = '刷新失敗';
+            }
+        } else {
+            $status = 'E00002';
+            $value = '未登入';
+        }
+        return $this->responseMessage($status, $value);
+    }
     protected function create(array $data)
     {
         return User::forceCreate([
@@ -85,7 +121,7 @@ class ApiController extends Controller
         ]);
     }
 
-    protected function responseMessage($status, $value=null)
+    protected function responseMessage($status, $value = null)
     {
         return response()->json([
             'status' => $status,
