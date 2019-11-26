@@ -13,7 +13,7 @@ class ApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('login', 'register');
+        $this->middleware('auth:api')->except('login', 'register');
     }
 
     protected function username()
@@ -23,10 +23,12 @@ class ApiController extends Controller
 
     public function register(Request $request)
     {
+        $value = '';
+        $meassage = '';
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             $status = 'E00002';
-            $value = $validator->errors();
+            $meassage = $validator->errors();
         } else {
             $api_token = Str::random(80);
             $data = array_merge($request->all(), compact('api_token'));
@@ -37,16 +39,16 @@ class ApiController extends Controller
                 $value = $api_token;
             } else {
                 $status = 'E00001';
-                $value = '註冊失敗';
             }
         }
-        return $this->responseMessage($status, $value);
+        return $this->responseMessage($status, $meassage, $value);
     }
 
     public function login()
     {
         $inputName = request($this->username());
         $user = User::where($this->username(), $inputName)->get()->first();
+        $value = '';
         if ($user) {
             if (password_verify(request('password'), $user->password)) {
                 $api_token = Str::random(80);
@@ -56,39 +58,36 @@ class ApiController extends Controller
                     $value = $api_token;
                 } else {
                     $status = 'E00001';
-                    $value = '登入失敗';
                 }
             } else {
                 $status = 'E00002';
-                $value = '輸入錯誤!';
             }
         } else {
             $status = 'E00002';
-            $value = '輸入錯誤!';
         }
-        return $this->responseMessage($status, $value);
+        return $this->responseMessage($status, '', $value);
     }
 
     public function logout()
     {
+        $value = '';
         $user = auth()->user();
         if ($user) {
             $result = $user->update(['api_token' => null]);
             if ($result) {
                 $status = '000000';
-                $value = '登出成功';
             } else {
                 $status = 'E00001';
-                $value = '認證失敗';
             }
         }
-        return $this->responseMessage($status, $value);
+        return $this->responseMessage($status, '', $value);
     }
 
     public function refresh()
     {
         $api_token = Str::random(80);
         $user = auth()->user();
+        $value = '';
         if ($user) {
             $result = $user->update(['api_token' => hash('sha256', $api_token)]);
             if ($result) {
@@ -96,13 +95,11 @@ class ApiController extends Controller
                 $value = $api_token;
             } else {
                 $status = 'E00001';
-                $value = '刷新失敗';
             }
         } else {
             $status = 'E00002';
-            $value = '未登入';
         }
-        return $this->responseMessage($status, $value);
+        return $this->responseMessage($status, '', $value);
     }
     protected function create(array $data)
     {
@@ -113,18 +110,39 @@ class ApiController extends Controller
             'api_token' => hash('sha256', $data['api_token'])
         ]);
     }
+
     protected function validator(array $data)
-    {
+    {   
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed']
         ]);
     }
 
-    protected function responseMessage($status, $value = null)
+    protected function responseMessage($status, $error=null, $value=null)
     {
+        $meassage = '';
+        switch ($status) {
+            case '000000':
+                $meassage = '執行成功!';
+                break;
+            case 'E00001':
+                $meassage = '執行失敗!';
+                break;
+            case 'E00002':
+                if ($error) {
+                    $meassage = $error;
+                } else {
+                    $meassage = '資料輸入錯誤!';
+                }
+                break;
+            default:
+                $meassage = '未定義錯誤!';
+                break;
+        }
         return response()->json([
             'status' => $status,
+            'meassage' => $meassage,
             'value' => $value
         ]);
     }
