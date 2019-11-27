@@ -53,8 +53,8 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
-    // $request = Illuminate\Http\Request::capture()
-    $request = App\Http\Requests\BaseRequest::capture() // 回傳自訂BaseRequest
+    $request = Illuminate\Http\Request::capture()
+    // $request = App\Http\Requests\BaseRequest::capture() // 回傳自訂BaseRequest
 );
 
 $response->send();
