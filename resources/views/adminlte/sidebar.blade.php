@@ -41,8 +41,14 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">ap呼叫測試</a></li>
+            <li><a href="#"></a></li>
           </ul>
+        </li>
+        <li class="header">API測試</li>
+        <li>
+            <a href="{{ route('api.index') }}">
+                <i class="fa fa-link"></i> <span>ap呼叫測試</span>
+            </a>
         </li>
       </ul>
       <!-- /.sidebar-menu -->
