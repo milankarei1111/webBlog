@@ -22,8 +22,8 @@ Route::group(['prefix' => 'blog'], function () {
     Route::resource('/category', 'Blog\CategoryController');
     Route::resource('/article', 'Blog\ArticleController');
     Route::resource('/comment', 'Blog\CommentController');
-    Route::get('/apitest', 'Blog\ApiTestController@index')->name('api.index');
-    Route::post('/apitest', 'Blog\ApiTestController@apiTest')->name('apiTest');
+    Route::get('/apitest', 'Blog\ApiDataTestController@index')->name('api.index');
+    Route::post('/apitest', 'Blog\ApiDataTestController@apiTest')->name('apiTest');
 });
 
 

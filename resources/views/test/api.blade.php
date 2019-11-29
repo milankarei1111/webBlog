@@ -8,7 +8,7 @@
                   <h3 class="box-title">API呼叫測試</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <form action="{{route('getApiTest')}}" method="POST">
+                    <form action="{{route('apiTest')}}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="formGroupExampleInput">Http method</label>
@@ -25,6 +25,12 @@
                             <input type="text" class="form-control" name="url" id="url" placeholder="URL">
                         </div>
                         <div class="box-body table-responsive no-padding">
+                                <div class="alert alert-primary" role="alert">
+                                     <h4 class="alert-heading">傳入參數說明</h4>
+                                       <ul>
+                                           <li>新增/修改/刪除權限需帶入參數:「api_token」</li>
+                                       </ul>
+                                 </div>
                                 <table id="myTable" class="table order-list">
                                         <thead>
                                         <tr>
@@ -34,22 +40,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="param[0][key]" class="form-control" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="param[0][value]"  class="form-control"/>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="param[0][description]"  class="form-control"/>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td colspan="5" style="text-align: left;">
-                                                <input type="button" class="btn btn-lg btn-block " id="addrow" value="新增一列" />
+                                                <input type="button" class="btn btn-primary btn-lg btn-block " id="addrow" value="新增參數" />
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -60,7 +55,15 @@
                             <button class="btn btn-success" type="submit"><i class="fa fa-save"></i>傳送</button>
                         </div>{{-- /.box-footer --}}
                     </form>
-
+                    <div>
+                       <label>回傳資料:</label>
+                       <br>
+                        @if (isset($data))
+                            <textarea class="form-control" rows="20" style="min-width: 100%" name="json_text">{{$data}}</textarea>
+                        @else
+                        <textarea class="form-control" rows="20" style="max-heigh:100% ;max-width: 100%" name="json_text"></textarea>
+                        @endif
+                    </div>
                 </div>{{-- /.box-body --}}
              </div><!-- /.box -->
         </div>
@@ -69,15 +72,15 @@
     <!-- script -->
     <script type="text/javascript">
         $(document).ready(function () {
-        var counter = 1;
+        var counter = 0;
 
             $("#addrow").on("click", function () {
                 var newRow = $("<tr>");
                 var cols = "";
 
                 cols += '<td><input type="text" class="form-control" name="param[' + counter + '][key]"/></td>';
-                cols += '<td><input type="text" class="form-control" name="param[' + counter + '[value]"/></td>';
-                cols += '<td><input type="text" class="form-control" name="param[' + counter + '[description]"/></td>';
+                cols += '<td><input type="text" class="form-control" name="param[' + counter + '][value]"/></td>';
+                cols += '<td><input type="text" class="form-control" name="param[' + counter + '][description]"/></td>';
 
                 cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
                 newRow.append(cols);
