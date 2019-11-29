@@ -23,8 +23,8 @@
                             <tr>
                             <th class="text-center" style="width: 4em;">#</th>
                             <th class="text-left">評論內容</th>
-                            <th class="text-left" style="width: 6em;">文章編號</th>
-                            <th class="text-left" style="width: 6em;">會員帳號</th>
+                            <th class="text-left" style="width: 6em;">文章標題</th>
+                            <th class="text-left" style="width: 6em;">會員名稱</th>
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
@@ -34,8 +34,8 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{ $comment->content}}</td>
-                                    <td>{{ $comment->article_id}}</td>
-                                    <td>{{ $comment->user_id}}</td>
+                                    <td>{{ $comment->title}}</td>
+                                    <td>{{ $comment->name}}</td>
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('comment.edit', $comment->comment_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>

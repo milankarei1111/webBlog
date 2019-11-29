@@ -17,6 +17,19 @@ class CommentController extends Controller
     public function index()
     {
         $comments = Comment::orderBy('comment_id', 'desc')->paginate(20);
+
+        if($comments){
+            foreach ($comments as $key =>$comment) {
+                $title = Comment::find($comment->comment_id)->article()->first()->title;
+                $name = Comment::find($comment->user_id)->user()->first();
+                if($name){
+                    $comments[$key]['name'] = $name->name;
+                } else {
+                    $comments[$key]['name'] = '';
+                }
+                $comments[$key]['title'] = $title;
+            }
+        }
         return view('comment.index', compact('comments'));
     }
 
