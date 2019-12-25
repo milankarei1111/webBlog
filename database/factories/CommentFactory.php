@@ -9,5 +9,6 @@ $factory->define(Comment::class, function (Faker $faker) {
     return [
         'content'=> $faker->realText($maxNbChars = 100, $indexSize = 1),
         'user_id'=>$faker->numberBetween(1,10),
+        'article_id'=>$faker->numberBetween(1,10),
     ];
 });
