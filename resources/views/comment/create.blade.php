@@ -1,5 +1,12 @@
 @extends('adminlte.master');
 
+@section('breadcrumb')
+    <section class="content-header">
+        <h1>評論管理</h1>
+        {{ Breadcrumbs::render() }}
+    </section>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-md-12">

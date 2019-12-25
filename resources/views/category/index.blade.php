@@ -1,5 +1,13 @@
 @extends('adminlte.master')
 
+@section('breadcrumb')
+
+<section class="content-header">
+    <h1>文章分類管理</h1>
+    {{ Breadcrumbs::render() }}
+  </section>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -25,6 +33,7 @@
                             <th class="text-center" style="width: 4em;">#</th>
                             <th class="text-left">分類名稱</th>
                             <th class="text-left">分類描述</th>
+                            <th class="text-center" style="width: 4em;">查看</th>
                             <th class="text-center" style="width: 4em;">編輯</th>
                             <th class="text-center" style="width: 4em;">刪除</th>
                             </tr>
@@ -36,6 +45,11 @@
                                     <td>{{ $category->name}}</td>
                                     <td>{{ $category->description}}</td>
 
+                                    <td class="text-center draggable-hidden">
+                                        <a class="btn btn-default btn-xs" href="{{ route('category.show', $category) }}">
+                                          <i class="fa fa-eye fa-fw"></i>
+                                        </a>
+                                    </td>
                                     <td class="text-center">
                                         <a class="btn btn-default btn-xs" href="{{ route('category.edit', $category->category_id) }}">
                                             <i class="fa fa-edit fa-fw"></i>

@@ -1,5 +1,12 @@
 @extends('adminlte.master')
 
+@section('breadcrumb')
+  <section class="content-header">
+    <h1>評論管理</h1>
+    {{ Breadcrumbs::render() }}
+  </section>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -11,11 +18,11 @@
             <div class="box box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">評論列表</h3>
-                    <div class="no-margin pull-right">
-                        {{-- <a href="{{route('comment.create')}}" class="btn btn-primary btn-md">
+                    {{-- <div class="no-margin pull-right">
+                        <a href="{{route('comment.create')}}" class="btn btn-primary btn-md">
                             <i class="fa fa-plus fa-fw"></i> 新增評論
-                        </a> --}}
-                    </div>
+                        </a>
+                    </div> --}}
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
