@@ -85,11 +85,10 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Article $article)
     {
-        $article = new Article;
-        $comments = $article->find($id)->comments()->get();
-        return view('article.show', compact('comments'));
+        $comments =$article->comments()->get();
+        return view('article.show', compact('comments', 'article'));
     }
 
     /**
